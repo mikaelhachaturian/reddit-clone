@@ -1,0 +1,9 @@
+div.usertext-body {
+  border-radius: 15px;
+  border-style: solid;
+  background: whitesmoke
+}
+
+p {
+  margin: 10px;
+}

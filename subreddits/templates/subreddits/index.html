@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+<h1>Subreddit List</h1>
+ <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Created Since</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subr in subs %}
+        <tr>
+          <td>
+            <a href="{% url 'subreddits:subr_view' subr.url_name %}">r/{{ subr.name }}</a>
+          </td>
+          <td>{{ subr.date_created }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

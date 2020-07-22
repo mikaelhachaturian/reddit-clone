@@ -1,0 +1,3 @@
+.vscode
+.pylintrc
+db.sqlite3

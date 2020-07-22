@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+ 
+{% load static %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'reddit-clone/css/home.css' %}">
+{% endblock  %}
+
+{% block content %}
+  <div class="row">
+    {% for post in posts %}
+    <div class="col-sm-12">
+    {% comment %} href CODE PLACER for future Post urls {% endcomment %}
+      <a href="{% url 'subreddits:post_view' post.id %}" class="post-link">
+        <div class="card">
+          <h3>{{ post.name }}</h3>
+          <h6 class="text-muted">Submitted by <b>{{ post.created_by }}</b> on {{ post.date_created }} to <b>r/{{ post.subr.name }}</b></h6>
+          <p>{{ post.text }}</p>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}
