@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import Textarea
 from .models import Subreddit, Comment
+import re
 
 
 class SubrForm(forms.Form):
@@ -8,9 +9,10 @@ class SubrForm(forms.Form):
 
     def clean(self):
         name = self.cleaned_data["name"]
-        if not name or len(name) > 30:
+        re_expr = re.compile(r"[<>/{}[\]~`'\"]")
+        if not name or len(name) > 30 or re_expr.search(name):
             raise forms.ValidationError(
-                "Please enter a valid name(must be under 30 characters).")
+                "Please enter a valid name (must be under 30 characters) and not contain: <>, /\, {}, [], ~, `, ' or \"  .")
         if Subreddit.objects.filter(name=name).exists():
             raise forms.ValidationError('Subreddit already exists')
 
