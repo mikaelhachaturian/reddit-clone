@@ -7,11 +7,13 @@
 
 
 {% block content %}
-<div>
+<a href="{% url 'subreddits:subr_view' post.subr.name %}" class="subr-link"><h1>r/{{ post.subr.name }}</h1></a>
+
+<div class="post-heading border-left border-dark bg-white">
   <h3 class="mt-2">"{{post.name}}"</h3>
-  <p><small>authored by <b>{{post.created_by}}</b></small></p>
+  <p><small>authored by <b style="color: blue">{{post.created_by}}</b> on <b>{{ post.date_created }}</b></small></p>
   <div class="usertext-body">
-    <p>{{post.text}}</p>
+    <p class="border-dark">{{post.text}}</p>
   </div>
 </div>
 
@@ -23,9 +25,6 @@
     {% load widget_tweaks %}
     {% csrf_token %}
 
-    {% comment %} <div class="form-group">
-      <textarea id="text" class="form-control" rows="3" cols="20"></textarea>
-    </div>  {% endcomment %}
     {% for field in form.visible_fields %}
       <div class="form-group">
         
@@ -38,10 +37,10 @@
               </div>
             {% endfor %}
           {% else %}
-            {% render_field field class="form-control" %}
+            {% render_field field class="form-control bg-white border border-dark text-body" %}
           {% endif %}
         {% else %}
-          {% render_field field class="form-control" %}
+          {% render_field field class="form-control bg-white border border-dark text-body" %}
         {% endif %}
 
       </div>
@@ -53,10 +52,10 @@
 <div class="row">
   <h5><u>Comments:</u></h5>
   {% for comment in comments %}
-  <div class="col-sm-12 mt-5">    
-    <div class="card">
+  <div class="col-sm-12 mt-3">    
+    <div class="card border-left border-info">
+      <p class="text-muted"><b style="color: blue">{{ comment.created_by }}</b> | <small>{{ comment.date_created }}</small></p>
       <h6 style="margin: 8px">{{ comment.text }}</h6>
-      <p class="text-muted"><small>Submitted by <b>{{ comment.created_by }}</b> on {{ comment.date_created }}</small></p>
     </div>
   </div>
   {% endfor %}

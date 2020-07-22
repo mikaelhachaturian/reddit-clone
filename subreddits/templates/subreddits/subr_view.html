@@ -2,15 +2,13 @@
 
 {% load static %}
 {% block extra_head %}
-{% comment %} load home css for post blue link removal {% endcomment %}
   <link rel="stylesheet" href="{% static 'reddit-clone/css/home.css' %}">
 {% endblock  %}
  
 {% block content %}
 <div class="row">
   <div class="col-sm-12">
-    <h1>r/{{ subr.name }}</h1>
-    Welcome to r/{{ subr.name }}!
+    <a href="{% url 'subreddits:subr_view' subr.name %}" class="subr-link"><h1>r/{{ subr.name }}</h1></a>
     <button type="button" class="btn btn-info btn-lg float-right" onclick="location.href='{% url 'subreddits:post_creation_form' subr.url_name %}'">Create Post</button>
   </div>
 </div>
@@ -19,7 +17,7 @@
   <div class="col-sm-12">
   {% comment %} href CODE PLACER for future Post urls {% endcomment %}
     <a href="{% url 'subreddits:post_view' post.id %}" class="post-link">
-      <div class="card">
+      <div class="post-card border-left border-dark bg-light border-3">
         <h3>{{ post.name }}</h3>
         <h6 class="text-muted">Submitted by <b>{{ post.created_by }}</b> on {{ post.date_created }} to <b>r/{{ post.subr.name }}</b></h6>
         <p>{{ post.text }}</p>
