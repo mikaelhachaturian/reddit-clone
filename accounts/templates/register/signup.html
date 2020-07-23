@@ -33,10 +33,10 @@
               </div>
             {% endfor %}
           {% else %}
-            {% render_field field class="form-control" %}
+            {% render_field field class="form-control bg-light border border-dark text-body" %}
           {% endif %}
         {% else %}
-          {% render_field field class="form-control" %}
+          {% render_field field class="form-control bg-light border border-dark text-body" %}
         {% endif %}
 
         {% if field.help_text %}
