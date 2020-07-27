@@ -10,4 +10,11 @@ urlpatterns = [
          name='post_creation_form'),
     path('<str:subr_url_name>', views.subr_view, name='subr_view'),
     path('comments/<int:post_id>/', views.post_view, name='post_view'),
+    path('comments/<int:post_id>/<int:comment_id>',
+         views.post_view, name='post_view'),
+    path('comments/<int:post_id>/<int:comment_id>/<str:vote_type>',
+         views.post_view, name='post_view'),
+    path('comments/<int:post_id>/<str:vote_type>',
+         views.post_view, name='post_view'),
+
 ]

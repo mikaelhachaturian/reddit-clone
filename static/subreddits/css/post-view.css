@@ -29,3 +29,13 @@ a.subr-link {
 a.subr-link:hover {
   color: #008B8B;
 }
+
+#upvote-button img {
+  height: 15px;
+  width: 15px;
+}
+
+#downvote-button img {
+  height: 15px;
+  width: 15px;
+}

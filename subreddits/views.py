@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Subreddit, Post, Comment
+from .models import Subreddit, Post, Comment, CommentVote, PostVote
 from .forms import SubrForm, PostForm, CommentForm
+from django.db import IntegrityError
+from django.urls import reverse
 
 
 def index(request):
@@ -46,7 +48,7 @@ def subr_view(request, subr_url_name):
     return render(request, 'subreddits/subr_view.html', context={'subr': subr, 'posts': posts})
 
 
-def post_view(request, post_id):
+def post_view(request, post_id, comment_id='', vote_type=''):
     if request.method == 'POST':
         form = CommentForm(request.POST)
         post = Post.objects.get(id=post_id)
@@ -58,6 +60,47 @@ def post_view(request, post_id):
     else:
         if not request.user.is_authenticated:
             return redirect('login_view')
+        elif comment_id:  # Comment Vote Section
+
+            if vote_type == 'upvote':
+                vote_int = 1
+            elif vote_type == 'downvote':
+                vote_int = -1
+
+            try:
+                vote = CommentVote(user=request.user,
+                                   comment=Comment.objects.get(id=comment_id), vote_int=vote_int)
+                vote.save()
+            except IntegrityError as e:
+                vote_update = CommentVote.objects.get(
+                    comment=Comment.objects.get(id=comment_id), user=request.user)
+                if (vote_type == 'upvote' and vote_update.vote_int == 1) or (vote_type == 'downvote' and vote_update.vote_int == -1):
+                    vote_update.vote_int = 0
+                else:
+                    vote_update.vote_int = vote_int
+
+                vote_update.save(update_fields=["vote_int"])
+            return redirect(reverse('subreddits:post_view', kwargs={'post_id': post_id}) + '#comment-view-{}'.format(comment_id))
+        elif vote_type:  # Post Comment Section
+            if vote_type == 'upvote':
+                vote_int = 1
+            elif vote_type == 'downvote':
+                vote_int = -1
+
+            try:
+                vote = PostVote(user=request.user,
+                                post=Post.objects.get(id=post_id), post_int=vote_int)
+                vote.save()
+            except IntegrityError as e:
+                vote_update = PostVote.objects.get(
+                    post=Post.objects.get(id=post_id), user=request.user)
+                if (vote_type == 'upvote' and vote_update.post_int == 1) or (vote_type == 'downvote' and vote_update.post_int == -1):
+                    vote_update.post_int = 0
+                else:
+                    vote_update.post_int = vote_int
+
+                vote_update.save(update_fields=["post_int"])
+            return redirect('subreddits:post_view', post_id=post_id)
         else:
             post = get_object_or_404(Post, id=post_id)
             comments = post.comment_set.order_by('-date_created')
