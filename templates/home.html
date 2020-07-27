@@ -8,12 +8,16 @@
 {% block content %}
   <div class="row">
     {% for post in posts %}
-    <div class="col-sm-12 post-col-left-position">
+    <div class="col-sm-1 mb-3 post-col-left-position">
+    <button id="upvote-button" class="btn ml-5 mb-2 mt-3 btn-outline-secondary" onclick="location.href='{% url 'homepage' post.id 'upvote'%}'"><img src="{% static 'subreddits/icon/upvote_empty.png' %}"></button>
+    <button id="downvote-button" class="btn ml-5 btn-outline-secondary" onclick="location.href='{% url 'homepage' post.id 'downvote'%}'"><img src="{% static 'subreddits/icon/downvote_empty.png' %}"></button>
+    </div>
+    <div id="post-view-{{post.id}}" class="col-sm-11 mb-3 post-col-left-position">
     {% comment %} href CODE PLACER for future Post urls {% endcomment %}
       <a href="{% url 'subreddits:post_view' post.id %}" class="post-link">
         <div class="post-card border-left border-dark bg-white border-3">
           <h3>{{ post.name }}</h3>
-          <h6 class="text-muted">Submitted by <b>{{ post.created_by }}</b> on {{ post.date_created }} to <b>r/{{ post.subr.name }}</b></h6>
+          <h6 class="text-muted">{{ post.votes_sum }} points | Submitted by <b>{{ post.created_by }}</b> on {{ post.date_created }} to <b>r/{{ post.subr.name }}</b></h6>
           <p>{{ post.text }}</p>
         </div>
       </a>
