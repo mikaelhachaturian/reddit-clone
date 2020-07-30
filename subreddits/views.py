@@ -27,19 +27,20 @@ def subr_creation_form(request):
 
 
 @login_required
-def post_creation_form(request, subr_url_name):
+def post_creation_form(request):
+    subs = Subreddit.objects.all()
     if request.method == 'POST':
-        subr = Subreddit.objects.get(url_name=subr_url_name)
         form = PostForm(request.POST)
         if form.is_valid():
+            subr = get_object_or_404(Subreddit, pk=form.cleaned_data["subs"])
             post = Post(
                 name=form.cleaned_data['name'], created_by=request.user.username, text=form.cleaned_data['text'], subr=subr)
             post.save()
-            return redirect('subreddits:subr_view', subr_url_name=subr.url_name)
+            return redirect('subreddits:post_view', post_id=post.pk)
     else:
         form = PostForm()
 
-    return render(request, 'post_creation_form/create_post.html', {'form': form, 'subr_url_name': subr_url_name})
+    return render(request, 'post_creation_form/create_post.html', {'form': form})
 
 
 def subr_view(request, subr_url_name):

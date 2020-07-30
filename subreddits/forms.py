@@ -4,13 +4,23 @@ from .models import Subreddit, Comment
 import re
 
 
+def get_subs():
+    subs = Subreddit.objects.all()
+    sub_list = []
+
+    for i in subs:
+        sub_list.append((i.id, i.name),)
+
+    return sub_list
+
+
 class SubrForm(forms.Form):
     name = forms.CharField(label='Name', max_length=100)
 
     def clean(self):
         name = self.cleaned_data["name"]
         re_expr = re.compile(r"[<>/{}[\]~`'\"]")
-        if not name or len(name) > 30 or re_expr.search(name):
+        if not name or len(name) > 30 or re_expr.search(name) or name == 'submit':
             raise forms.ValidationError(
                 "Please enter a valid name (must be under 30 characters) and not contain: <>, /\, {}, [], ~, `, ' or \"  .")
         if Subreddit.objects.filter(name=name).exists():
@@ -18,8 +28,9 @@ class SubrForm(forms.Form):
 
 
 class PostForm(forms.Form):
+    subs = forms.ChoiceField(label='Choose a Community', choices=get_subs())
     name = forms.CharField(label='Post Name', max_length=100)
-    text = forms.CharField(label='Text', max_length=255)
+    text = forms.CharField(label='Text', max_length=1024)
 
     def clean(self):
         name = self.cleaned_data["name"]

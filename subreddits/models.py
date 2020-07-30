@@ -12,7 +12,7 @@ class Subreddit(models.Model):
 class Post(models.Model):
     name = models.CharField(max_length=100)
     created_by = models.CharField(max_length=255)
-    text = models.CharField(max_length=255)
+    text = models.CharField(max_length=1024)
     date_created = models.DateTimeField(default=timezone.now)
     subr = models.ForeignKey(Subreddit, on_delete=models.CASCADE)
 
@@ -20,7 +20,6 @@ class Post(models.Model):
         votes = self.votes.all()
         sum = 0
         for vote in votes:
-
             sum += vote.post_int
         return sum
 
