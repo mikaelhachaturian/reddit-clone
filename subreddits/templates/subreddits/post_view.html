@@ -7,14 +7,18 @@
 
 
 {% block content %}
-<a href="{% url 'subreddits:subr_view' post.subr.name %}" class="subr-link"><h1>r/{{ post.subr.name }}</h1></a>
-
 <div class="row">
-  <div class="col-sm-1 mb-3">
+  <div class="col-sm-2 mt-3 mb-3 p-1">
+    <a href="{% url 'subreddits:subr_view' post.subr.name %}" class="subr-link"><h1>r/{{ post.subr.name }}</h1></a>
+  </div>
+  <div class="col-sm-10 mt-3 mb-3"></div>
+</div>
+<div class="row ">
+  <div class="col-sm-1 mb-3 p-1">
     <button id="upvote-button" class="btn ml-5 mb-2 mt-3 btn-outline-secondary" onclick="location.href='{% url 'subreddits:post_view' post.id 'upvote'%}'"><img src="{% static 'subreddits/icon/upvote_empty.png' %}"></button>
     <button id="downvote-button" class="btn ml-5 mb-2 btn-outline-secondary" onclick="location.href='{% url 'subreddits:post_view' post.id 'downvote'%}'"><img src="{% static 'subreddits/icon/downvote_empty.png' %}"></button>
   </div>
-  <div class="col-sm-11 mb-3">  
+  <div class="col-sm-11 mb-3 p-1">  
     <div class="post-heading border-left border-dark bg-white">
       <h3 class="mt-2">"{{post.name}}"</h3>
       <p><small> {{ post.votes_sum }} points | authored by <b style="color: blue">{{post.created_by}}</b> on <b>{{ post.date_created }}</b></small></p>
