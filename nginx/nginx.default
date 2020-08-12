@@ -1,4 +1,3 @@
-# nginx.default
 
 server {
     listen 8020;
